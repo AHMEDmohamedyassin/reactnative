@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import { View , Text, Pressable, FlatList, ActivityIndicator , StyleSheet, TextInput, Button, Alert} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View , Text, Pressable, FlatList, ActivityIndicator , StyleSheet, TextInput, Button, Alert, TouchableOpacity } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { Add_Item_Action, Delete_Item_Action } from "./redux/action/MainAction";
 
-const ListPage = ({navigation}) => {
-    let initialData = [
-        {
-            name : 'ahmed',
-            age : 20
-        },
-        {
-            name : 'ahmed2',
-            age : 21
-        },
-        {
-            name : 'ahmed3',
-            age : 22
-        },
-    ]
-    const [Data , setData] = useState(initialData)
+const ReduxListPage = ({navigation}) => {
+    const Data = useSelector(state => state.MainReducer)
+    const dispatch = useDispatch()
     const [getText , setText] = useState('')
 
     const makeAlert = () =>{
@@ -37,12 +25,16 @@ const ListPage = ({navigation}) => {
 
     const onSubmitHandler = () => {
         if(getText == '') return makeAlert()
-        setData([...Data , {name : getText , age : 23}])
+        dispatch(Add_Item_Action({name : getText , id : Data.length +1}))
         setText('')
     }
 
+    const deleteItemHandler = (id) => {
+        dispatch(Delete_Item_Action(id))
+    }
+
     return (
-        <View style={{flex:1 , alignItems:'center'}}>
+        <View style={{flex:1 , alignItems:'center' , marginTop : 25}}>
             <Pressable onPress={() => {navigation.navigate('MainPage')}} >
                 <Text style={{fontSize:30 , backgroundColor:'dodgerblue' , color:'white' , padding:10 , borderRadius:10}}>go to home</Text>
             </Pressable>
@@ -54,21 +46,23 @@ const ListPage = ({navigation}) => {
                 />
             <Button title="submit" color='tomato' onPress={() => onSubmitHandler()}/>
 
-            <ActivityIndicator size="small" color="#0000ff" style={{marginVertical:20}}/>
-
             <FlatList style={{width:'100%' , display:'flex'}}
                 data={Data}
                 renderItem={({item , index}) => (
-                    <View style={styles.itemContainer} index={index}>
+                    <TouchableOpacity  
+                        style={styles.itemContainer}
+                        index={index}
+                        onPress={() => deleteItemHandler(item.id)}
+                        >
                         <Text style={{fontSize:20}}>{item.name}</Text>
-                    </View>
+                    </TouchableOpacity>
                 )}
             />
         </View>
     );
 };
 
-export default ListPage;
+export default ReduxListPage;
 
 const styles = StyleSheet.create({
     itemContainer:{
