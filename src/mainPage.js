@@ -53,6 +53,7 @@ export default function MainPage({ navigation }) {
                                 textAlign: "center",
                             },
                         ]}
+                        onPress={() => navigation.navigate('VideoComp')}
                     >
                         {({ pressed }) => (
                             <Text style={{ fontSize: 20 }}>

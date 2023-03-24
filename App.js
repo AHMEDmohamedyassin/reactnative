@@ -7,6 +7,7 @@ import ListPage from './src/ListPage';
 import ReduxListPage from './src/ReduxListPage';
 import { Provider } from 'react-redux';
 import Store from './src/redux/store';
+import VideoComp from './src/video';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,10 +16,11 @@ export default function App() {
     <Provider store={Store}>
     <View style={styles.container}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{headerShown:false}}>
+        <Stack.Navigator screenOptions={{headerShown:false}} initialRouteName='VideoComp'>
         <Stack.Screen name="MainPage" component={MainPage} />
         <Stack.Screen name="ReduxListPage" component={ReduxListPage}/>
         <Stack.Screen name="ListPage" component={ListPage}/>
+        <Stack.Screen name="VideoComp" component={VideoComp}/>
         </Stack.Navigator>
       </NavigationContainer>
     </View>
